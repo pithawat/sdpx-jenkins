@@ -7,10 +7,25 @@ pipeline {
                 // cleanWs()
             }
         }
+
+        stage('Setup Python'){
+            steps{
+                echo 'Creating virtual env and install requirements'
+                sh 'python3 -m venv venv'
+                sh '''
+                    source venv/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirement.txt
+                '''
+            }
+        }
+
         stage('Unit Test'){
             steps{
                 echo 'Running unit tests'
-                // sh 'python3'
+                sh '''
+                    python -m unittest discover -s . -p "test.py" -v
+                '''
             }
         }
 
