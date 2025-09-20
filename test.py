@@ -3,13 +3,16 @@ from app import app
 
 class PlusTest(unittest.TestCase):
 
+    def setUp(self):
+        self.client = app.test_client()
+
     def test_getcode(self):
-        res = app.hello()
-        self.assertEqual(res,"hello")
+        res = self.client.get('/getcode')
+        self.assertEqual(res.get_json(), {"message": "hello"})
 
     def test_positive_plus(self):
-        res = app.plus(5,6)
-        self.assertEqual(res,11)
+        res = self.client.get('/plus/5/6')
+        self.assertEqual(res.get_json(),{"sum":11})
     
 if __name__ == "__main__":
     unittest.main()
