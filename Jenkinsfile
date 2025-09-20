@@ -4,12 +4,13 @@ pipeline {
         stage('Clean'){
             steps{
                 echo 'cleaning workspace'
-                cleanWs()
+                // cleanWs()
             }
         }
         stage('Unit Test'){
             steps{
                 echo 'Running unit tests'
+                // sh 'python3'
             }
         }
 
