@@ -4,7 +4,7 @@ pipeline {
         stage('Clean'){
             steps{
                 echo 'cleaning workspace'
-                // cleanWs()
+                sh 'pwd'
             }
         }
 
