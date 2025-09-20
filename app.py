@@ -16,8 +16,6 @@ def hello():
 def plus(x,y):
     result = x+y
     return jsonify({
-        "x":x,
-        "y":y,
         "sum":result
     })
 
