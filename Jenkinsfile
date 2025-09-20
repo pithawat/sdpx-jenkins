@@ -1,10 +1,17 @@
 pipeline {
     agent {label 'vm-test'}
     stages{
-        stage('test'){
+        stage('Clean'){
             steps{
-                echo 'clean'
+                echo 'cleaning workspace'
+                cleanWs()
             }
         }
+        stage('Unit Test'){
+            steps{
+                echo 'Running unit tests'
+            }
+        }
+
     }
 }
