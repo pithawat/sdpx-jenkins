@@ -79,17 +79,17 @@ pipeline {
             }
         }
 
-        // stage('push image to github registry'){
-        //     steps{
-        //         withCredentials([usernamePassword(credentialsId: 'ghcr-creds', usernameVariable: 'GH_USER', passwordVariable: 'GH_PAT')]){
-        //             sh '''
-        //                 echo $GH_PAT | docker login ghcr.io -u $GH_USER --password-stdin
-        //                 docker tag $IMAGE_NAME $REGISTRY/$IMAGE_NAME:$TAG
-        //                 docker push $REGISTRY/$IMAGE_NAME:$TAG
-        //             '''
-        //         }
-        //     }
-        // }
+        stage('push image to github registry'){
+            steps{
+                withCredentials([usernamePassword(credentialsId: 'ghcr-creds', usernameVariable: 'GH_USER', passwordVariable: 'GH_PAT')]){
+                    sh '''
+                        echo $GH_PAT | docker login ghcr.io -u $GH_USER --password-stdin
+                        docker tag $IMAGE_NAME $REGISTRY/$IMAGE_NAME:$TAG
+                        docker push $REGISTRY/$IMAGE_NAME:$TAG
+                    '''
+                }
+            }
+        }
     }
 
     post {
