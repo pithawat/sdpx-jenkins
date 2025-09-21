@@ -62,6 +62,7 @@ pipeline {
         stage('clone Robot-test repo'){
             steps{
                 sh '''
+                    rm -rf sdpx-robot_test
                     git clone https://github.com/pithawat/sdpx-robot_test.git
                 '''
             }
