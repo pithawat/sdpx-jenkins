@@ -122,11 +122,4 @@ pipeline {
         }
     }
 
-    post {
-        agent {label 'vm-test'}
-        always {
-            echo 'Cleaning up containers'
-            sh 'docker rm -f $CONTAINER_NAME || true'
-        }
-    }
 }
