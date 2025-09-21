@@ -1,6 +1,5 @@
 pipeline {
-    agent {label 'vm-test'}
-
+    agent none
     environment{
         IMAGE_NAME = 'flask_api'
         CONTAINER_NAME = 'flask_api_container'
@@ -10,6 +9,7 @@ pipeline {
 
     stages{
         stage('Clean'){
+            agent {label 'vm-test'}
             steps{
                 echo 'cleaning workspace'
                 sh 'pwd'
@@ -17,6 +17,7 @@ pipeline {
         }
 
         stage('Setup Python'){
+            agent {label 'vm-test'}
             steps{
                 echo 'Creating virtual env and install requirements'
                 sh 'python3 -m venv venv'
@@ -29,6 +30,7 @@ pipeline {
         }
 
         stage('Unit Test'){
+            agent {label 'vm-test'}
             steps{
                 echo 'Running unit tests'
                 sh '''
@@ -43,6 +45,7 @@ pipeline {
         }
 
         stage('Create API image'){
+            agent {label 'vm-test'}
             steps{
                 echo 'create API Image'
                 sh 'docker build -t $IMAGE_NAME .'
@@ -50,6 +53,7 @@ pipeline {
         }
 
         stage('Start API Container'){
+            agent {label 'vm-test'}
             steps{
                 sh '''
                     echo 'running container'
@@ -61,6 +65,7 @@ pipeline {
         }
 
         stage('clone Robot-test repo'){
+            agent {label 'vm-test'}
             steps{
                 sh '''
                     rm -rf sdpx-robot_test
@@ -70,6 +75,7 @@ pipeline {
         }
 
         stage('Run Robot-test'){
+            agent {label 'vm-test'}
             steps{
                 sh '''
                     cd sdpx-robot_test
@@ -80,6 +86,7 @@ pipeline {
         }
 
         stage('push image to github registry'){
+            agent {label 'vm-test'}
             steps{
                 withCredentials([usernamePassword(credentialsId: 'ghcr-creds', usernameVariable: 'GH_USER', passwordVariable: 'GH_PAT')]){
                     sh '''
@@ -89,10 +96,34 @@ pipeline {
                     '''
                 }
             }
+            post {
+                always {
+                    echo 'Cleaning up containers'
+                    sh 'docker rm -f $CONTAINER_NAME || true'
+                }
+            }
+        }
+
+        stage('pull image from github'){
+            agent {label 'vm-pre_prod'}
+            steps{
+                withCredentials([usernamePassword(credentialsId: 'ghcr-creds', usernameVariable: 'GH_USER', passwordVariable: 'GH_PAT')]){
+                    sh '''
+                      echo $GH_PAT | docker login ghcr.io -u $GH_USER --password-stdin
+                      docker pull $REGISTRY/$IMAGE_NAME:$TAG
+
+                      docker stop $CONTAINER_NAME || true
+                      docker rm $CONTAINER_NAME || true
+
+                      docker run -d --name $CONTAINER_NAME -p 5000:5000 $REGISTRY/$IMAGE_NAME:TAG
+                    '''
+                }
+            }
         }
     }
 
     post {
+        agent {label 'vm-test'}
         always {
             echo 'Cleaning up containers'
             sh 'docker rm -f $CONTAINER_NAME || true'
