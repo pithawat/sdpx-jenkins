@@ -45,7 +45,7 @@ pipeline {
         stage('Create API image'){
             steps{
                 echo 'create API Image'
-                sh 'docker build -t $IMAGE_NAME .'
+                sh 'sudo docker build -t $IMAGE_NAME .'
             }
         }
 
@@ -53,7 +53,7 @@ pipeline {
             steps{
                 sh '''
                     echo 'running container'
-                    docker run -d --name $CONTAINER_NAME -p 5000:5000 $IMAGE_NAME
+                    sudo docker run -d --name $CONTAINER_NAME -p 5000:5000 $IMAGE_NAME
                     sleep 5
                 '''
             }
