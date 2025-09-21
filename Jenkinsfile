@@ -55,6 +55,7 @@ pipeline {
                     echo 'running container'
                     docker run -d --name $CONTAINER_NAME -p 5000:5000 $IMAGE_NAME
                     sleep 20
+                    docker ps
                 '''
             }
         }
