@@ -71,6 +71,7 @@ pipeline {
             steps{
                 sh '''
                     cd sdpx-robot_test
+                    . ../venv/bin/activate
                     robot api_test.robot
                 '''
             }
