@@ -58,7 +58,7 @@ pipeline {
                 sh '''
                     echo 'running container'
                     docker run -d --name $CONTAINER_NAME -p 5000:5000 $IMAGE_NAME
-                    sleep 20
+                    sleep 10
                     docker ps
                 '''
             }
@@ -115,7 +115,7 @@ pipeline {
                       docker stop $CONTAINER_NAME || true
                       docker rm $CONTAINER_NAME || true
 
-                      docker run -d --name $CONTAINER_NAME -p 5000:5000 $REGISTRY/$IMAGE_NAME:TAG
+                      docker run -d --name $CONTAINER_NAME -p 5000:5000 $REGISTRY/$IMAGE_NAME:$TAG
                     '''
                 }
             }
