@@ -10,7 +10,7 @@ def home():
 # Example GET route
 @app.route('/getcode', methods=['GET'])
 def hello():
-    return jsonify({"message": "kuy few"})
+    return jsonify({"message": "hello few"})
 
 @app.route('/plus/<int:x>/<int:y>', methods=['GET'])
 def plus(x,y):
