@@ -8,7 +8,7 @@ class PlusTest(unittest.TestCase):
 
     def test_getcode(self):
         res = self.client.get('/getcode')
-        self.assertEqual(res.get_json(), {"message": "hello few"})
+        self.assertEqual(res.get_json(), {"message": "hello link"})
 
     def test_positive_plus(self):
         res = self.client.get('/plus/5/6')
