@@ -18,6 +18,18 @@ def plus(x,y):
     return jsonify({
         "sum":result
     })
+@app.route('/is2hornor/<float:x>', methods=['GET'])
+def is_two_hornor(x):
+    if x >= 3.25 and x <= 3.49:
+        result = True
+    else:
+        result = False
+    return jsonify({
+        "gpax": result
+    })
+        
+
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0",debug=True)
